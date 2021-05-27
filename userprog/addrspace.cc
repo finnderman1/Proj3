@@ -98,13 +98,13 @@ AddrSpace::AddrSpace(OpenFile *executable, PCB* newPCB)
 
         // Allocate space for entire addr space on backing store at creation
         //pageTable[i].space = this;
-        pageTable[i].locationOnDisk = virtualMemoryManager->allocSwapSector();
+        locationOnDisk[i] = virtualMemoryManager->allocSwapSector();
         char placeHolder[PageSize];
         bzero(placeHolder, PageSize);
-        virtualMemoryManager->writeToSwap(placeHolder, PageSize, pageTable[i].locationOnDisk);
+        virtualMemoryManager->writeToSwap(placeHolder, PageSize, locationOnDisk[i]);
 
         // Debuggin output
-        int currVirtPage = pageTable[i].locationOnDisk / PageSize;
+        int currVirtPage = locationOnDisk[i] / PageSize;
         DEBUG('v',"Z %d: %d\n", pcb->getPID(), currVirtPage);
 
         // Maintain swap space page information
@@ -159,9 +159,9 @@ AddrSpace::AddrSpace(const AddrSpace* other, PCB* newPCB)
 
         // Allocate space for entire addr space on backing store at creation
         //pageTable[i].space = this;
-        pageTable[i].locationOnDisk = virtualMemoryManager->allocSwapSector();
-        virtualMemoryManager->copySwapSector(pageTable[i].locationOnDisk,
-                                             (other->pageTable)[i].locationOnDisk);
+        locationOnDisk[i] = virtualMemoryManager->allocSwapSector();
+        virtualMemoryManager->copySwapSector(locationOnDisk[i],
+                                             (other->locationOnDisk[i]));
         
         // Maintain swap space page information
         //SwapSectorInfo * swapInfo =
@@ -300,7 +300,7 @@ int AddrSpace::ReadFile(int virtAddr, OpenFile* file, int size, int fileAddr)
         int offset = virtAddr % PageSize;
         int numBytesThisLoop = size < PageSize ? size : PageSize; // read 1 page at a time
         virtualMemoryManager->writeToSwap(buffer1 + bytesCopiedSoFar, numBytesThisLoop,
-                                        pageTable[pageTableIndex].locationOnDisk + offset);
+                                        locationOnDisk[pageTableIndex] + offset);
         size -= numBytesThisLoop;
         bytesCopiedSoFar += numBytesThisLoop;
         virtAddr += numBytesThisLoop;

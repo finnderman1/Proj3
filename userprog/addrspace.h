@@ -42,6 +42,7 @@ class AddrSpace {
     TranslationEntry* getPageTableEntry(int pageTableIndex);
     int getPageIndex(TranslationEntry* page);
     TranslationEntry *pageTable;	// Assume linear page table translation
+    int * locationOnDisk;
 					// for now!
 
   private:
