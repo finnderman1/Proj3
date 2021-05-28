@@ -42,7 +42,7 @@ class AddrSpace {
     TranslationEntry* getPageTableEntry(int pageTableIndex);
     int getPageIndex(TranslationEntry* page);
     TranslationEntry *pageTable;	// Assume linear page table translation
-    int * locationOnDisk;
+    int locationOnDisk[numPages];
 					// for now!
 
   private:
@@ -71,6 +71,7 @@ class AddrSpace {
     PCB* getPCB();                      // returns the associated PCB
     bool isValid();                     // means we allocated addrspace success
     TranslationEntry *pageTable;	// Assume linear page table translation
+    int locationOnDisk[numPages];
 					// for now!
 
   private:
