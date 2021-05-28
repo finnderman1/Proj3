@@ -133,7 +133,7 @@ void VirtualMemoryManager::loadPageToCurrVictim(int virtAddr)
     int pageTableIndex = virtAddr / PageSize;
     TranslationEntry* page = currentThread->space->getPageTableEntry(pageTableIndex);
     char* physMemLoc = machine->mainMemory + page->physicalPage * PageSize;
-    int swapSpaceLoc = physicalMemoryInfo[page->physPage].space->locationOnDisk[pageTableIndex];
+    int swapSpaceLoc = physicalMemoryInfo[page->physicalPage].space->locationOnDisk[pageTableIndex];
     swapFile->ReadAt(physMemLoc, PageSize, swapSpaceLoc);
 
   //  int swapSpaceIndex = swapSpaceLoc / PageSize;
