@@ -83,7 +83,7 @@ void VirtualMemoryManager::swapPageIn(int virtAddr)
                     cont = false;
                     if(victimPage->dirty == TRUE)
                     {
-                        int sect = physPageInfo->space->locationOnDisk[victimPage->virtualPage];
+                        int sect = physPageInfo->space->locationOnDisk+(victimPage->virtualPage);
                         char* memAdd = machine->mainMemory + victimPage->physicalPage * PageSize;
                         writeToSwap(memAdd, PageSize, sect);
                         victimPage->valid = FALSE;
@@ -120,7 +120,7 @@ void VirtualMemoryManager::releasePages(AddrSpace* space)
             memoryManager->clearPage(currPage->physicalPage);
             physicalMemoryInfo[currPage->physicalPage].space = NULL; 
         }
-        swapSectorMap->Clear((space->locationOnDisk[i]) / PageSize);
+        swapSectorMap->Clear((space->locationOnDisk+i) / PageSize);
     }
 }
 
@@ -133,7 +133,7 @@ void VirtualMemoryManager::loadPageToCurrVictim(int virtAddr)
     int pageTableIndex = virtAddr / PageSize;
     TranslationEntry* page = currentThread->space->getPageTableEntry(pageTableIndex);
     char* physMemLoc = machine->mainMemory + page->physicalPage * PageSize;
-    int swapSpaceLoc = (physicalMemoryInfo[page->physicalPage].space)->locationOnDisk[pageTableIndex];
+    int swapSpaceLoc = (physicalMemoryInfo[page->physicalPage].space)->locationOnDisk + pageTableIndex;
     swapFile->ReadAt(physMemLoc, PageSize, swapSpaceLoc);
 
   //  int swapSpaceIndex = swapSpaceLoc / PageSize;
