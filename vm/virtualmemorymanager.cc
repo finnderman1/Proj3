@@ -73,7 +73,7 @@ void VirtualMemoryManager::swapPageIn(int virtAddr)
                 cont = false;
             }
             else{
-                TranslationEntry* victimPage = getPageTableEntry(physicalMemoryInfo[nextVictim]);
+                TranslationEntry* victimPage = getPageTableEntry(physicalMemoryInfo + nextVictim);
                 if(victimPage->use == TRUE)
                 {
                     victimPage->use = FALSE;
