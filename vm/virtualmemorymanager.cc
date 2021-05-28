@@ -63,7 +63,7 @@ void VirtualMemoryManager::swapPageIn(int virtAddr)
         while(cont)
 
         {
-            FrameInfo * physPageInfo = physicalMemoryInfo[nextVictim];
+            FrameInfo * physPageInfo = physicalMemoryInfo + nextVictim;
             if(physPageInfo->space == NULL)
             {
                 physPageInfo->space = currentThread->space;
